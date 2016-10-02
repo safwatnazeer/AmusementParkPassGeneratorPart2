@@ -7,6 +7,12 @@
 //
 
 import UIKit
+import AVFoundation
+
+// Make sounds global vars
+var dingSound: SystemSoundID = 0     // Access granted sound
+var buzzSound: SystemSoundID = 1     // Access Denied  sound
+
 
 class ViewController: UIViewController {
 
