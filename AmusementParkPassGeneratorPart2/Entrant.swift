@@ -52,6 +52,9 @@ enum Employee: Entrant {
     case HourlyEmployeeMaintenance
     case Manager
     
+    case Vendor(String) // move vendor out
+    case ContractEmployee(String) // move contract employee out
+    
     // Business rules for allowed access and discount based on employee type
     var passAccess: PassAccess {
         switch self {
@@ -64,6 +67,16 @@ enum Employee: Entrant {
                         return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.AmuesmentAreas,.MaintenanceAreas,.RideControlAreas,.KitchenAreas], discountFood: .Discount15Food, discountMerchandise: .Discount25Merchandise)
             case .Manager:
                         return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.AmuesmentAreas,.MaintenanceAreas,.RideControlAreas,.KitchenAreas,.OfficeAreas], discountFood: .Discount15Food, discountMerchandise: .Discount25Merchandise)
+        
+        
+        case .Vendor("Acme"):
+                return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.RideControlAreas], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
+        
+        case .ContractEmployee("1001"):
+            return PassAccess(rideAccessType: [], areaAccessType: [.KitchenAreas], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
+
+        default:
+            return PassAccess(rideAccessType: [], areaAccessType: [], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
         }
     }
     
@@ -72,6 +85,8 @@ enum Employee: Entrant {
         switch self{
             case .HourlyEmployeeFoodServices,.HourlyEmployeeRideServices,.HourlyEmployeeMaintenance,.Manager:
                 return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode]
+        default:
+            return []
         }
 
     }

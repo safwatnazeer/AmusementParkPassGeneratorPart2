@@ -71,7 +71,7 @@ struct PassAccess {
 }
 
 // enum to list types of required personal information
-enum RequiredInfo
+enum RequiredInfo:Int
 {
     case BirthDate
     case FirstName
@@ -80,6 +80,9 @@ enum RequiredInfo
     case City
     case State
     case ZipCode
+    
+    case ProjectNumber
+    case VendorCompany
 }
 
 // struct to hold actual personal information of an entrant
@@ -91,6 +94,9 @@ struct Info {
     var city: String?
     var state: String?
     var zipCode: String?
+    
+    var projectNumber: String?
+    var vendorCompany: String?
 }
 
 
