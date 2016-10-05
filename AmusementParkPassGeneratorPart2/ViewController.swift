@@ -324,6 +324,7 @@ class ViewController: UIViewController {
     
     @IBAction func populateData() {
         
+        
         // populate data for only enabled fields
         for f in inputFieldsMappingArray {
             
