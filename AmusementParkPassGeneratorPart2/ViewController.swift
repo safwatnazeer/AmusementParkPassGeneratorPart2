@@ -13,13 +13,38 @@ import AVFoundation
 var dingSound: SystemSoundID = 0     // Access granted sound
 var buzzSound: SystemSoundID = 1     // Access Denied  sound
 
+struct FieldMap {
+    let inputField: UITextField
+    let reqInfo: RequiredInfo
+}
+struct ButtonEntrantMap {
+    let buttonLabel: String
+    let entrantType: Entrant
+}
+
 
 class ViewController: UIViewController {
 
+    // Park System
+    let parkSystem = ParkSystem()
+    var currentEntrantType: Entrant = Guest.ClassicGuest
+    
+    // Stack views
     @IBOutlet weak var entrantTypeSV: UIStackView!
     @IBOutlet weak var subTypeSV: UIStackView!
-    @IBOutlet weak var textF: UITextField!
+
     
+    // Input fields
+    @IBOutlet weak var firstNameInput: UITextField!
+    @IBOutlet weak var lastNameInput: UITextField!
+    @IBOutlet weak var addressInput: UITextField!
+    @IBOutlet weak var birthDateInput: UITextField!
+    
+    // Mapping data to UI
+    var inputFieldsMappingArray = [FieldMap]()
+    var buttonEntrantTypesMappingArray = [ButtonEntrantMap]()
+    
+    // Buttons
     var currentSubButtons = [UIButton]()
     var mainButtons = [UIButton]()
     
@@ -30,36 +55,139 @@ class ViewController: UIViewController {
         "Manager": ["Manager"],
         "Vendor": ["Vendor"]
     ]
-  //  @IBOutlet weak var childButton: UIButton!
+    
+   
+    
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-       setupMainButtons()
-    
+        // setup buttons
+        // Main
+        setupMainButtons()
+        changeButtonsColor( mainButtonsList[0], buttonsList: mainButtons)
         
-       changeButtonsColor( mainButtonsList[0], buttonsList: mainButtons)
-       
+        // Sub
         setupSubButtons( mainButtonsList[0])
         if let firsMainButtonList = subButtonsList[ mainButtonsList[0]] {
         let firstLabel = firsMainButtonList[0]
             changeButtonsColor(firstLabel , buttonsList: currentSubButtons)
+            
         }
         
-        textF.tag = RequiredInfo.FirstName.rawValue
+        // setup input fields array
+        inputFieldsMappingArray = [
+            FieldMap(inputField: firstNameInput, reqInfo: RequiredInfo.FirstName),
+            FieldMap(inputField: lastNameInput , reqInfo: RequiredInfo.LastName),
+            FieldMap(inputField: addressInput, reqInfo: RequiredInfo.StreetAddress),
+            FieldMap(inputField: birthDateInput, reqInfo: RequiredInfo.BirthDate)
+        
+        ]
+        
+        
+
+        
+        // map sub buttons to enterant types
+        buttonEntrantTypesMappingArray = [
+            ButtonEntrantMap(buttonLabel: "Child", entrantType: Guest.FreeChildGuest),
+            ButtonEntrantMap(buttonLabel: "Adult", entrantType: Guest.ClassicGuest),
+            ButtonEntrantMap(buttonLabel: "Senior", entrantType: Guest.SeniorGuest),
+            ButtonEntrantMap(buttonLabel: "VIP", entrantType: Guest.VIPGuest),
+            ButtonEntrantMap(buttonLabel: "Season Pass", entrantType: Guest.SeasonPassGuest),
+            ButtonEntrantMap(buttonLabel: "Food Services", entrantType: Employee.HourlyEmployeeFoodServices),
+            ButtonEntrantMap(buttonLabel: "Ride Services", entrantType: Employee.HourlyEmployeeRideServices),
+            ButtonEntrantMap(buttonLabel: "Maintenance", entrantType: Employee.HourlyEmployeeMaintenance),
+            ButtonEntrantMap(buttonLabel: "Manager", entrantType: Employee.Manager),
+            ButtonEntrantMap(buttonLabel: "Contractor", entrantType: ContractEmployee.ContractEmployee("")),
+            ButtonEntrantMap(buttonLabel: "Vendor", entrantType: Vendor.Vendor(""))
+        ]
+        
+        // enable fields for first choice
+        currentEntrantType = buttonEntrantTypesMappingArray[0].entrantType
+        enableRequiredFields()
+        
         
     }
+   
+    func enableRequiredFields() {
+        
+        let reqFieldsList = currentEntrantType.requiredInfo
+        
+        for f in inputFieldsMappingArray {
+            if reqFieldsList.contains(f.reqInfo) {
+                // enable field
+                f.inputField.enabled = true
+                f.inputField.backgroundColor = UIColor.whiteColor()
+            }else {
+                // disable field
+                f.inputField.enabled = false
+                f.inputField.backgroundColor = UIColor.grayColor()
+                
+            }
+        }
+    }
+    
+    @IBAction func createPass() {
+      
+        
+        // create Info struct
+        let info = Info(birthDate: nil, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: nil, state: nil, zipCode: nil, projectNumber: nil, vendorCompany: nil,visitDate: nil)
+        
+      let errors = parkSystem.validateRequiredInfo(currentEntrantType, info: info)
+        for e in errors { print("There is error: \(e)")}
+        
+        // make all fields normal
+        for f in inputFieldsMappingArray {
+            f.inputField.layer.borderWidth = 1
+            f.inputField.layer.cornerRadius = 5.0
+            f.inputField.layer.borderColor = UIColor.lightGrayColor().CGColor
+        }
+        // mark only faulty fields
+        for f in inputFieldsMappingArray {
+            for e in errors {
+                if  e.field == f.reqInfo {
+                    f.inputField.layer.borderWidth = 3
+                    f.inputField.layer.cornerRadius = 5.0
+                    f.inputField.layer.borderColor = UIColor.redColor().CGColor
+                }
+            }
+        }
+        // show error message
+        if errors.count > 0 {
+            showErrorMessage(errors)
+        }
+        else {
+            // create pass
+        }
+    }
 
+    func showErrorMessage(errors:[ErrorComponents]){
+        var message: String = ""
+        for e in errors {
+            message = message + "\(e.error.rawValue)\n"
+        }
+        let alert = UIAlertController(title: "Data Issues!", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
     @IBAction func mainButtonResponder(sender: AnyObject) {
     
         if let sender = sender as? UIButton,label = sender.titleLabel?.text {
             changeButtonsColor(label, buttonsList: mainButtons)
-            
-            
             setupSubButtons(label)
             if let subButtonsList = subButtonsList[label] {
                 let firstLabel = subButtonsList[0]
+               // currentEntrantType = Guest.ClassicGuest
                 changeButtonsColor(firstLabel , buttonsList: currentSubButtons)
+                for b in buttonEntrantTypesMappingArray{
+                    if b.buttonLabel == firstLabel {
+                        currentEntrantType = b.entrantType
+                        enableRequiredFields()
+                    }
+                }
             }
 
         }
@@ -73,6 +201,13 @@ class ViewController: UIViewController {
             
             print("sender label: \(label)")
             changeButtonsColor(label, buttonsList: currentSubButtons)
+            
+            for m in buttonEntrantTypesMappingArray {
+                if m.buttonLabel == label {
+                    currentEntrantType = m.entrantType
+                    enableRequiredFields()
+                }
+            }
         }
         
         
@@ -137,8 +272,7 @@ class ViewController: UIViewController {
             if label == buttonLabelToHighlight {
                 b.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             } else  {
-                b.setTitleColor(UIColor(red: 181.0/255.0, green: 188.0/255.0, blue: 193.0/255.0, alpha: 1.0)
-, forState: .Normal)
+                b.setTitleColor(UIColor(red: 181.0/255.0, green: 188.0/255.0, blue: 193.0/255.0, alpha: 1.0),forState: .Normal)
             }
         }
     }

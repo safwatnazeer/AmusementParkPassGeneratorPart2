@@ -8,6 +8,13 @@
 
 import Foundation
 
+struct ErrorComponents {
+    let field : RequiredInfo
+    let error : Error
+}
+
+
+
 // struct to hold stored prperties needed for park control system
 struct ParkSystem: ParkControlSystem {
     var freeChildGuestAgeLimit : Double  = 5.0 //childeren under 5 admit for free
@@ -17,8 +24,7 @@ struct ParkSystem: ParkControlSystem {
 // The system manages access , discounts and pass generation
 protocol ParkControlSystem {
     var freeChildGuestAgeLimit : Double {get }
-
-    func validateRequiredInfo (entrantType: Entrant, info:Info) -> [Error]
+    func validateRequiredInfo (entrantType: Entrant, info:Info) -> [ErrorComponents]
     func createPass(entrantType: Entrant, addionalInfo:Info) -> Pass?
     
     
@@ -28,25 +34,28 @@ extension ParkControlSystem  {
     
     // Function to validate if personal infromation provided match business rules for certain entrant type or not
     // Function will return array of errors when data is not suffcient
-    func validateRequiredInfo (entrantType: Entrant, info:Info) -> [Error] {
+    func validateRequiredInfo (entrantType: Entrant, info:Info) -> [ErrorComponents] {
         
         let requiredInfo = entrantType.requiredInfo
-        var errors = [Error]()
+        var errors = [ErrorComponents]()
         
-        if requiredInfo.contains(.BirthDate) && info.birthDate == nil { errors.append(.BirthDateMissing)}
-        if requiredInfo.contains(.FirstName) && info.firstName == nil {errors.append(.FirstNameMissing)}
-        if requiredInfo.contains(.LastName) && info.lastName == nil {errors.append(.LastNameMissing)}
-        if requiredInfo.contains(.StreetAddress) && info.streetAddress == nil {errors.append(.StreetAddressMissing)}
-        if requiredInfo.contains(.City) && info.city == nil {errors.append(.CityMissing)}
-        if requiredInfo.contains(.State) && info.state == nil {errors.append(.StateMissing)}
-        if requiredInfo.contains(.ZipCode) && info.zipCode == nil {errors.append(.ZipCodeMissing)}
+        if requiredInfo.contains(.BirthDate) && (info.birthDate == nil){
+            errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: .BirthDateMissing))
+        }
+        if requiredInfo.contains(.FirstName) && (info.firstName == nil || info.firstName == "") {errors.append(ErrorComponents(field:RequiredInfo.FirstName,error: Error.FirstNameMissing))}
+        
+        if requiredInfo.contains(.LastName) && (info.lastName == nil || info.lastName == ""){errors.append(ErrorComponents(field:RequiredInfo.LastName,error: Error.LastNameMissing))}
+        if requiredInfo.contains(.StreetAddress) && (info.streetAddress == nil || info.streetAddress == "") {errors.append(ErrorComponents(field:RequiredInfo.StreetAddress ,error: Error.StreetAddressMissing))}
+        if requiredInfo.contains(.City) && (info.city == nil  || info.city == ""){errors.append(ErrorComponents(field:RequiredInfo.City,error: Error.CityMissing ))}
+        if requiredInfo.contains(.State) && (info.state == nil || info.state == "") {errors.append(ErrorComponents(field:RequiredInfo.State,error: Error.StateMissing))}
+        if requiredInfo.contains(.ZipCode) && (info.zipCode == nil  || info.zipCode == "") {errors.append(ErrorComponents(field:RequiredInfo.ZipCode,error: Error.ZipCodeMissing))}
         
         // check birthdate for guest child
         if let guestType = entrantType as? Guest {
             if (guestType == .FreeChildGuest) {
                 if let birthDate = info.birthDate {
                     // check age <= 5 years else add error age above limit
-                    if !checkChildAgeInLimit(birthDate) {errors.append(Error.FreeChildGuestAgeAboveLimit) }
+                    if !checkChildAgeInLimit(birthDate) {errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: Error.FreeChildGuestAgeAboveLimit)) }
                     
                 }
             }

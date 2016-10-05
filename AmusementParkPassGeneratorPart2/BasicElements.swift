@@ -41,24 +41,25 @@ enum DiscountAccessFood : Int,AccessPrevilige {
 // enum for possible merchandise discounts
 enum DiscountAccessMerchandise : Int,AccessPrevilige {
     case Discount0Merchandise = 0
+    case Discount10Merchandise = 10
     case Discount20Merchandise = 20
     case Discount25Merchandise = 25
 }
 
 
 // All Error types for missing info or other possibl errors
-enum Error {
-    case NoError
-    case FreeChildGuestAgeAboveLimit
-    case FreeChildAgeMissing
-    case PersonalDataNotProvided
-    case BirthDateMissing
-    case FirstNameMissing
-    case LastNameMissing
-    case StreetAddressMissing
-    case CityMissing
-    case StateMissing
-    case ZipCodeMissing
+enum Error: String {
+    case NoError = "No Error"
+    case FreeChildGuestAgeAboveLimit = "Free child guest age is above limit "
+    case FreeChildAgeMissing = "Child age is missing"
+    case PersonalDataNotProvided = "Personal data is not provided"
+    case BirthDateMissing = "Birth date is missing"
+    case FirstNameMissing = "First name is missing"
+    case LastNameMissing = "Last name is missing"
+    case StreetAddressMissing = "Street Address is missing"
+    case CityMissing = "City is missing"
+    case StateMissing = "State is missing"
+    case ZipCodeMissing = "Zip code is missing"
 }
 
 
@@ -71,7 +72,7 @@ struct PassAccess {
 }
 
 // enum to list types of required personal information
-enum RequiredInfo:Int
+enum RequiredInfo
 {
     case BirthDate
     case FirstName
@@ -83,6 +84,7 @@ enum RequiredInfo:Int
     
     case ProjectNumber
     case VendorCompany
+    case VisitDate
 }
 
 // struct to hold actual personal information of an entrant
@@ -97,6 +99,7 @@ struct Info {
     
     var projectNumber: String?
     var vendorCompany: String?
+    var visitDate:NSDate?
 }
 
 

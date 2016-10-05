@@ -15,10 +15,13 @@ protocol Entrant {
 }
 
 // enum to define differnt types of guests
-enum Guest : Entrant {
-        case ClassicGuest
-        case VIPGuest
-        case FreeChildGuest
+enum Guest :String, Entrant {
+        case ClassicGuest = "Adult"
+        case VIPGuest = "VIP"
+        case FreeChildGuest = "Child"
+    
+        case SeniorGuest = "Senior"
+        case SeasonPassGuest = "Season Pass"
     
     // Business rules for allowed access and discount types
     var passAccess: PassAccess {
@@ -29,6 +32,12 @@ enum Guest : Entrant {
             return PassAccess(rideAccessType: [.SkipAllRidesLines,.AllRides], areaAccessType: [.AmuesmentAreas], discountFood: .Discount10Food, discountMerchandise: .Discount20Merchandise)
         case .FreeChildGuest:
             return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.AmuesmentAreas], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
+        
+        case .SeniorGuest:
+            return PassAccess(rideAccessType: [.AllRides,.SkipAllRidesLines], areaAccessType: [.AmuesmentAreas], discountFood: .Discount10Food, discountMerchandise: .Discount10Merchandise)
+        
+        case .SeasonPassGuest:
+            return PassAccess(rideAccessType: [.AllRides,.SkipAllRidesLines], areaAccessType: [.AmuesmentAreas], discountFood: .Discount10Food, discountMerchandise: .Discount20Merchandise)
         }
     }
     
@@ -41,19 +50,24 @@ enum Guest : Entrant {
             return[]
         case .FreeChildGuest:
             return[RequiredInfo.BirthDate]
+            
+        case .SeniorGuest:
+            return[RequiredInfo.FirstName, RequiredInfo.LastName,RequiredInfo.BirthDate]
+        case .SeasonPassGuest:
+            return[.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode]
+            
         }
     }
 
 }
 
-enum Employee: Entrant {
+enum Employee: String, Entrant {
     case HourlyEmployeeFoodServices
     case HourlyEmployeeRideServices
     case HourlyEmployeeMaintenance
     case Manager
     
-    case Vendor(String) // move vendor out
-    case ContractEmployee(String) // move contract employee out
+    
     
     // Business rules for allowed access and discount based on employee type
     var passAccess: PassAccess {
@@ -69,14 +83,10 @@ enum Employee: Entrant {
                         return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.AmuesmentAreas,.MaintenanceAreas,.RideControlAreas,.KitchenAreas,.OfficeAreas], discountFood: .Discount15Food, discountMerchandise: .Discount25Merchandise)
         
         
-        case .Vendor("Acme"):
-                return PassAccess(rideAccessType: [.AllRides], areaAccessType: [.RideControlAreas], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
         
-        case .ContractEmployee("1001"):
-            return PassAccess(rideAccessType: [], areaAccessType: [.KitchenAreas], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
+        
 
-        default:
-            return PassAccess(rideAccessType: [], areaAccessType: [], discountFood: .Discount0Food, discountMerchandise: .Discount0Merchandise)
+       
         }
     }
     
@@ -85,14 +95,12 @@ enum Employee: Entrant {
         switch self{
             case .HourlyEmployeeFoodServices,.HourlyEmployeeRideServices,.HourlyEmployeeMaintenance,.Manager:
                 return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode]
-        default:
-            return []
+       
         }
 
     }
 
 }
-
 
 
 
