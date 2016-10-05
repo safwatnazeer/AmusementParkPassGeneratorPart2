@@ -352,10 +352,16 @@
                     <connections>
                         <outlet property="addressInput" destination="DMB-Qt-XLa" id="mKk-gR-SGH"/>
                         <outlet property="birthDateInput" destination="beS-bS-rat" id="lmF-Sv-Vdz"/>
+                        <outlet property="cityInput" destination="r7s-0e-vHR" id="HZU-fB-wSe"/>
+                        <outlet property="companyInput" destination="nSl-l8-If9" id="JYg-X5-ag1"/>
                         <outlet property="entrantTypeSV" destination="Tqe-aj-FPL" id="ZLG-bh-atC"/>
                         <outlet property="firstNameInput" destination="AKk-25-ZZR" id="Npu-ZB-Vt9"/>
                         <outlet property="lastNameInput" destination="voP-L6-YfR" id="j1m-Um-5cj"/>
+                        <outlet property="projectInput" destination="e9t-pM-T25" id="zzu-UY-aDe"/>
+                        <outlet property="ssnInput" destination="93E-Ay-J6A" id="Q9J-ho-9Kv"/>
+                        <outlet property="stateInput" destination="rdS-jr-pTw" id="yb5-mC-Mef"/>
                         <outlet property="subTypeSV" destination="cXw-bT-Fe6" id="qqL-5q-VjM"/>
+                        <outlet property="zipCodeInput" destination="koa-UI-0tc" id="kK5-dg-Gid"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

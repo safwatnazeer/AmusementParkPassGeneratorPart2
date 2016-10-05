@@ -39,6 +39,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var lastNameInput: UITextField!
     @IBOutlet weak var addressInput: UITextField!
     @IBOutlet weak var birthDateInput: UITextField!
+    @IBOutlet weak var ssnInput: UITextField!
+    @IBOutlet weak var projectInput: UITextField!
+    @IBOutlet weak var companyInput: UITextField!
+    @IBOutlet weak var cityInput: UITextField!
+    @IBOutlet weak var stateInput: UITextField!
+    @IBOutlet weak var zipCodeInput: UITextField!
     
     // Mapping data to UI
     var inputFieldsMappingArray = [FieldMap]()
@@ -81,7 +87,13 @@ class ViewController: UIViewController {
             FieldMap(inputField: firstNameInput, reqInfo: RequiredInfo.FirstName),
             FieldMap(inputField: lastNameInput , reqInfo: RequiredInfo.LastName),
             FieldMap(inputField: addressInput, reqInfo: RequiredInfo.StreetAddress),
-            FieldMap(inputField: birthDateInput, reqInfo: RequiredInfo.BirthDate)
+            FieldMap(inputField: birthDateInput, reqInfo: RequiredInfo.BirthDate),
+            FieldMap(inputField: projectInput, reqInfo: RequiredInfo.ProjectNumber),
+            FieldMap(inputField: ssnInput, reqInfo: RequiredInfo.SSN),
+            FieldMap(inputField: cityInput, reqInfo: RequiredInfo.City),
+            FieldMap(inputField: stateInput, reqInfo: RequiredInfo.State),
+            FieldMap(inputField: zipCodeInput, reqInfo: RequiredInfo.ZipCode),
+            FieldMap(inputField: companyInput, reqInfo: RequiredInfo.VendorCompany),
         
         ]
         
@@ -106,6 +118,8 @@ class ViewController: UIViewController {
         // enable fields for first choice
         currentEntrantType = buttonEntrantTypesMappingArray[0].entrantType
         enableRequiredFields()
+        // clear data and restore fields color
+        makeAllFieldsNormal(true)
         
         
     }
@@ -118,31 +132,45 @@ class ViewController: UIViewController {
             if reqFieldsList.contains(f.reqInfo) {
                 // enable field
                 f.inputField.enabled = true
+                //f.inputField.layer.borderWidth = 2
                 f.inputField.backgroundColor = UIColor.whiteColor()
             }else {
                 // disable field
                 f.inputField.enabled = false
-                f.inputField.backgroundColor = UIColor.grayColor()
+                //f.inputField.layer.borderWidth = 2
+                f.inputField.backgroundColor = UIColor.clearColor()
                 
             }
         }
+        
+    }
+    
+    func makeAllFieldsNormal(clearData: Bool) {
+        
+        // make color normal
+        for f in inputFieldsMappingArray {
+            f.inputField.layer.borderWidth = 1
+            f.inputField.layer.cornerRadius = 5.0
+            f.inputField.layer.borderColor = UIColor.lightGrayColor().CGColor
+            // clear input text
+            if clearData { f.inputField.text = "" }
+        
+        }
+        
+
     }
     
     @IBAction func createPass() {
-      
         
         // create Info struct
-        let info = Info(birthDate: nil, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: nil, state: nil, zipCode: nil, projectNumber: nil, vendorCompany: nil,visitDate: nil)
+        let info = Info(birthDate: nil, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
         
       let errors = parkSystem.validateRequiredInfo(currentEntrantType, info: info)
         for e in errors { print("There is error: \(e)")}
         
         // make all fields normal
-        for f in inputFieldsMappingArray {
-            f.inputField.layer.borderWidth = 1
-            f.inputField.layer.cornerRadius = 5.0
-            f.inputField.layer.borderColor = UIColor.lightGrayColor().CGColor
-        }
+        makeAllFieldsNormal(false)
+        
         // mark only faulty fields
         for f in inputFieldsMappingArray {
             for e in errors {
@@ -186,6 +214,8 @@ class ViewController: UIViewController {
                     if b.buttonLabel == firstLabel {
                         currentEntrantType = b.entrantType
                         enableRequiredFields()
+                        // clear data and restore fields color
+                        makeAllFieldsNormal(true)
                     }
                 }
             }
@@ -206,6 +236,8 @@ class ViewController: UIViewController {
                 if m.buttonLabel == label {
                     currentEntrantType = m.entrantType
                     enableRequiredFields()
+                    // clear data and restore fields color
+                    makeAllFieldsNormal(true)
                 }
             }
         }

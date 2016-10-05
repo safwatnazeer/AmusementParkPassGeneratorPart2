@@ -85,6 +85,7 @@ enum RequiredInfo
     case ProjectNumber
     case VendorCompany
     case VisitDate
+    case SSN
 }
 
 // struct to hold actual personal information of an entrant
