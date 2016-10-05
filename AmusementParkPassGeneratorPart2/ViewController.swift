@@ -16,6 +16,7 @@ var buzzSound: SystemSoundID = 1     // Access Denied  sound
 struct FieldMap {
     let inputField: UITextField
     let reqInfo: RequiredInfo
+    let label: UILabel
 }
 struct ButtonEntrantMap {
     let buttonLabel: String
@@ -45,6 +46,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var cityInput: UITextField!
     @IBOutlet weak var stateInput: UITextField!
     @IBOutlet weak var zipCodeInput: UITextField!
+    
+    // Input fields screen labels
+    @IBOutlet weak var birthDateLabel: UILabel!
+    @IBOutlet weak var ssnLabel: UILabel!
+    @IBOutlet weak var projectLabel: UILabel!
+    @IBOutlet weak var firstNameLabel: UILabel!
+    @IBOutlet weak var lastNameLabel: UILabel!
+    @IBOutlet weak var companyLabel: UILabel!
+    @IBOutlet weak var streetLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var stateLabel: UILabel!
+    @IBOutlet weak var zipCodeLabel: UILabel!
     
     // Mapping data to UI
     var inputFieldsMappingArray = [FieldMap]()
@@ -82,25 +95,25 @@ class ViewController: UIViewController {
             
         }
         
-        // setup input fields array
+        // setup array of input fields and thier labels mapping to required fields enum
         inputFieldsMappingArray = [
-            FieldMap(inputField: firstNameInput, reqInfo: RequiredInfo.FirstName),
-            FieldMap(inputField: lastNameInput , reqInfo: RequiredInfo.LastName),
-            FieldMap(inputField: addressInput, reqInfo: RequiredInfo.StreetAddress),
-            FieldMap(inputField: birthDateInput, reqInfo: RequiredInfo.BirthDate),
-            FieldMap(inputField: projectInput, reqInfo: RequiredInfo.ProjectNumber),
-            FieldMap(inputField: ssnInput, reqInfo: RequiredInfo.SSN),
-            FieldMap(inputField: cityInput, reqInfo: RequiredInfo.City),
-            FieldMap(inputField: stateInput, reqInfo: RequiredInfo.State),
-            FieldMap(inputField: zipCodeInput, reqInfo: RequiredInfo.ZipCode),
-            FieldMap(inputField: companyInput, reqInfo: RequiredInfo.VendorCompany),
+            FieldMap(inputField: firstNameInput, reqInfo: RequiredInfo.FirstName, label: firstNameLabel),
+            FieldMap(inputField: lastNameInput , reqInfo: RequiredInfo.LastName, label: lastNameLabel),
+            FieldMap(inputField: addressInput, reqInfo: RequiredInfo.StreetAddress, label: streetLabel),
+            FieldMap(inputField: birthDateInput, reqInfo: RequiredInfo.BirthDate, label: birthDateLabel),
+            FieldMap(inputField: projectInput, reqInfo: RequiredInfo.ProjectNumber, label: projectLabel),
+            FieldMap(inputField: ssnInput, reqInfo: RequiredInfo.SSN, label: ssnLabel),
+            FieldMap(inputField: cityInput, reqInfo: RequiredInfo.City, label: cityLabel),
+            FieldMap(inputField: stateInput, reqInfo: RequiredInfo.State, label: stateLabel),
+            FieldMap(inputField: zipCodeInput, reqInfo: RequiredInfo.ZipCode, label: zipCodeLabel),
+            FieldMap(inputField: companyInput, reqInfo: RequiredInfo.VendorCompany, label: companyLabel),
         
         ]
         
         
 
         
-        // map sub buttons to enterant types
+        // map sub buttons labels to equivalent enterant types
         buttonEntrantTypesMappingArray = [
             ButtonEntrantMap(buttonLabel: "Child", entrantType: Guest.FreeChildGuest),
             ButtonEntrantMap(buttonLabel: "Adult", entrantType: Guest.ClassicGuest),
@@ -132,12 +145,12 @@ class ViewController: UIViewController {
             if reqFieldsList.contains(f.reqInfo) {
                 // enable field
                 f.inputField.enabled = true
-                //f.inputField.layer.borderWidth = 2
+                f.label.textColor = UIColor.blackColor()
                 f.inputField.backgroundColor = UIColor.whiteColor()
             }else {
                 // disable field
                 f.inputField.enabled = false
-                //f.inputField.layer.borderWidth = 2
+                f.label.textColor = UIColor.lightGrayColor()
                 f.inputField.backgroundColor = UIColor.clearColor()
                 
             }
@@ -309,5 +322,31 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func populateData() {
+        
+        // populate data for only enabled fields
+        for f in inputFieldsMappingArray {
+            
+            if f.inputField.enabled == true {
+                switch f.reqInfo {
+                    case .BirthDate: f.inputField.text = "10/19/1995"
+                    case .FirstName: f.inputField.text = "Safwat"
+                    case .LastName: f.inputField.text = "Shenouda"
+                    case .VendorCompany: f.inputField.text = "Acme"
+                    case .StreetAddress: f.inputField.text = "10 Blue Mountain st."
+                    case .City: f.inputField.text = "Amsterdam"
+                    case .State: f.inputField.text = "NY"
+                    case .ZipCode: f.inputField.text = "153567"
+                    case .ProjectNumber: f.inputField.text = "1001"
+                    case .SSN: f.inputField.text = "###-##-####"
+                default:
+                    f.inputField.text = ""
+                }
+            }
+        }
+        
+        
+        
+    }
     
    }

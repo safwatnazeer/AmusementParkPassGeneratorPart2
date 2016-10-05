@@ -26,10 +26,10 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cXw-bT-Fe6" userLabel="GuestSubTypeSV">
-                                <rect key="frame" x="0.0" y="90" width="600" height="40"/>
+                                <rect key="frame" x="0.0" y="90" width="600" height="50"/>
                                 <color key="backgroundColor" red="0.80000001190000003" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="ZiL-Wa-MiO"/>
+                                    <constraint firstAttribute="height" constant="50" id="ZiL-Wa-MiO"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="aVx-w9-vwF"/>
                                 </constraints>
                                 <variation key="default">
@@ -39,7 +39,7 @@
                                 </variation>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="5Xz-LC-86d" userLabel="birthdate-ssn-projectSV">
-                                <rect key="frame" x="30" y="150" width="540" height="100"/>
+                                <rect key="frame" x="30" y="160" width="540" height="100"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="00X-On-Psk">
                                         <rect key="frame" x="0.0" y="0.0" width="160" height="100"/>
@@ -95,7 +95,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QGc-DM-hGI" userLabel="seprator1">
-                                <rect key="frame" x="30" y="280" width="540" height="2"/>
+                                <rect key="frame" x="30" y="290" width="540" height="2"/>
                                 <color key="backgroundColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="2" id="TH6-Yt-Yjj"/>
@@ -108,7 +108,7 @@
                                 </variation>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="DHw-Hl-u9Q" userLabel="firstname-lastnameSV">
-                                <rect key="frame" x="30" y="312" width="540" height="100"/>
+                                <rect key="frame" x="30" y="322" width="540" height="100"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1c1-EJ-aoT">
                                         <rect key="frame" x="0.0" y="0.0" width="255" height="100"/>
@@ -148,14 +148,14 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtO-4J-Oh9" userLabel="seprator2">
-                                <rect key="frame" x="30" y="442" width="540" height="2"/>
+                                <rect key="frame" x="30" y="452" width="540" height="2"/>
                                 <color key="backgroundColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="y1B-Xo-nMH"/>
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VYl-In-QRw" userLabel="CompnaySV">
-                                <rect key="frame" x="30" y="474" width="540" height="100"/>
+                                <rect key="frame" x="30" y="484" width="540" height="100"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HXT-LN-Qpn" userLabel="Compnay">
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="24"/>
@@ -283,7 +283,7 @@
                                             <color key="titleColor" red="0.10689317058871572" green="0.5181290064230768" blue="0.39484506308852912" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="createPass" destination="BYZ-38-t0r" eventType="touchUpInside" id="CPg-bj-agd"/>
+                                            <action selector="populateData" destination="BYZ-38-t0r" eventType="touchUpInside" id="hxT-AY-GY0"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -352,16 +352,26 @@
                     <connections>
                         <outlet property="addressInput" destination="DMB-Qt-XLa" id="mKk-gR-SGH"/>
                         <outlet property="birthDateInput" destination="beS-bS-rat" id="lmF-Sv-Vdz"/>
+                        <outlet property="birthDateLabel" destination="N04-vP-Get" id="dxo-Tw-Lnb"/>
                         <outlet property="cityInput" destination="r7s-0e-vHR" id="HZU-fB-wSe"/>
+                        <outlet property="cityLabel" destination="3Cp-2d-pjd" id="OsU-eE-mBr"/>
                         <outlet property="companyInput" destination="nSl-l8-If9" id="JYg-X5-ag1"/>
+                        <outlet property="companyLabel" destination="HXT-LN-Qpn" id="v69-j1-Kq5"/>
                         <outlet property="entrantTypeSV" destination="Tqe-aj-FPL" id="ZLG-bh-atC"/>
                         <outlet property="firstNameInput" destination="AKk-25-ZZR" id="Npu-ZB-Vt9"/>
+                        <outlet property="firstNameLabel" destination="0Sl-gp-MfR" id="XxY-tw-WQ7"/>
                         <outlet property="lastNameInput" destination="voP-L6-YfR" id="j1m-Um-5cj"/>
+                        <outlet property="lastNameLabel" destination="b0X-7W-x8f" id="8w6-Yz-9Nq"/>
                         <outlet property="projectInput" destination="e9t-pM-T25" id="zzu-UY-aDe"/>
+                        <outlet property="projectLabel" destination="azJ-m6-ZYE" id="PNj-ia-FJt"/>
                         <outlet property="ssnInput" destination="93E-Ay-J6A" id="Q9J-ho-9Kv"/>
+                        <outlet property="ssnLabel" destination="ZaG-8f-V9t" id="QLr-cL-4T4"/>
                         <outlet property="stateInput" destination="rdS-jr-pTw" id="yb5-mC-Mef"/>
+                        <outlet property="stateLabel" destination="hou-Bm-5Yc" id="sxs-l5-P6H"/>
+                        <outlet property="streetLabel" destination="Szx-RD-icl" id="0hH-Dd-Th1"/>
                         <outlet property="subTypeSV" destination="cXw-bT-Fe6" id="qqL-5q-VjM"/>
                         <outlet property="zipCodeInput" destination="koa-UI-0tc" id="kK5-dg-Gid"/>
+                        <outlet property="zipCodeLabel" destination="IXj-r6-Ez8" id="LW7-eq-oaJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

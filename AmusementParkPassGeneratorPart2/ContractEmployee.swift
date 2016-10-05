@@ -31,9 +31,9 @@ enum ContractEmployee: Entrant {
     var requiredInfo: [RequiredInfo] {
         switch self{
         case .ContractEmployee("1001"),.ContractEmployee("1002"),.ContractEmployee("1003"),.ContractEmployee("2001"),.ContractEmployee("2002"):
-            return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode]
+            return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode, .ProjectNumber]
         default:
-            return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode]
+            return [.FirstName, .LastName, .StreetAddress, .City , .State, .ZipCode,.ProjectNumber]
         }
     }
     
