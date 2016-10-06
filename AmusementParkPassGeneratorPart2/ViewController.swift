@@ -176,7 +176,7 @@ class ViewController: UIViewController {
     @IBAction func createPass() {
         
         // create Info struct
-        let info = Info(birthDate: nil, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
+        let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
         
       let errors = parkSystem.validateRequiredInfo(currentEntrantType, info: info)
         for e in errors { print("There is error: \(e)")}

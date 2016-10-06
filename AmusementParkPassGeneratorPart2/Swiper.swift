@@ -22,9 +22,14 @@ extension Swiper {
     // extention to give any swiper extra feature to personalise birthday message
     // If birthdate is avialble it will check if it is like today and return a personalized message, otherwise it return empty string
     func greetForBirthday(pass: Pass) -> String {
-        if let entrantBirthDate = pass.addionalInfo.birthDate {
+        
+        let dateFormater = NSDateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        
+        if let entrantBirthDate = pass.addionalInfo.birthDate,birthDate = dateFormater.dateFromString(entrantBirthDate) {
+            
             let cal = NSCalendar.currentCalendar()
-            let entrateBirthDateComp = cal.components([.Day,.Month], fromDate: entrantBirthDate )
+            let entrateBirthDateComp = cal.components([.Day,.Month], fromDate: birthDate )
             let todayDateComp = cal.components([.Day,.Month], fromDate: NSDate())
             
             if entrateBirthDateComp.day == todayDateComp.day && entrateBirthDateComp.month == todayDateComp.month {

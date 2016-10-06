@@ -90,7 +90,7 @@ enum RequiredInfo
 
 // struct to hold actual personal information of an entrant
 struct Info {
-    var birthDate: NSDate?
+    var birthDate: String?
     var firstName: String?
     var lastName: String?
     var streetAddress: String?

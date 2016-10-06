@@ -39,7 +39,7 @@ extension ParkControlSystem  {
         let requiredInfo = entrantType.requiredInfo
         var errors = [ErrorComponents]()
         
-        if requiredInfo.contains(.BirthDate) && (info.birthDate == nil){
+        if requiredInfo.contains(.BirthDate) && (info.birthDate == nil || info.birthDate == ""){
             errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: .BirthDateMissing))
         }
         if requiredInfo.contains(.FirstName) && (info.firstName == nil || info.firstName == "") {errors.append(ErrorComponents(field:RequiredInfo.FirstName,error: Error.FirstNameMissing))}
@@ -55,7 +55,8 @@ extension ParkControlSystem  {
             if (guestType == .FreeChildGuest) {
                 if let birthDate = info.birthDate {
                     // check age <= 5 years else add error age above limit
-                    if !checkChildAgeInLimit(birthDate) {errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: Error.FreeChildGuestAgeAboveLimit)) }
+                     
+                    if !checkChildAgeInLimit(birthDate) && birthDate != "" {errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: Error.FreeChildGuestAgeAboveLimit)) }
                     
                 }
             }
@@ -78,14 +79,22 @@ extension ParkControlSystem  {
     
     // Helper function
     // Function to check Free gurst child ages is within limit
-    func checkChildAgeInLimit(birthDate: NSDate) -> Bool {
+    func checkChildAgeInLimit(birthDateString: String) -> Bool {
         
         //let cal = NSCalendar.currentCalendar()
-        let age = NSDate().timeIntervalSinceDate(birthDate)
-        let ageInYears = age/(365*24*60*60)
-        print ("Age: \(ageInYears) ")
-        if ageInYears <= freeChildGuestAgeLimit { return true } else { return false }
+        let dateFormater = NSDateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
         
+        if let birthDate = dateFormater.dateFromString(birthDateString)
+        {
+            let age = NSDate().timeIntervalSinceDate(birthDate)
+            let ageInYears = age/(365*24*60*60)
+            print ("Age: \(ageInYears) ")
+            if ageInYears <= freeChildGuestAgeLimit { return true } else { return false }
+        }
+        else {
+            return false
+        }
     }
     
         
