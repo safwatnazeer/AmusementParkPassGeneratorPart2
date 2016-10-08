@@ -12,6 +12,7 @@ typealias HANDLER = ()->()
 
 class PassViewController: UIViewController {
 
+    // data from main view controller
     var pass : Pass?
     var passType: String?
     var completionHandler : HANDLER?
@@ -22,7 +23,7 @@ class PassViewController: UIViewController {
     @IBOutlet weak var testingResults: UILabel!
     
     
-    
+    // dismiss controller
     @IBAction func createNewPass(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
         
@@ -35,9 +36,10 @@ class PassViewController: UIViewController {
         
     }
     
+
     override func viewDidLoad() {
-        print(pass?.addionalInfo)
         
+        // show basic data name, type and access previliges
         if let pass = pass {
         nameLabel?.text = "\(pass.addionalInfo.firstName!) \(pass.addionalInfo.lastName!)"
         passTypeLabel?.text = "\(passType!) Pass"
@@ -63,6 +65,10 @@ class PassViewController: UIViewController {
     
     }
     
+    // This method responds to all test buttons shown
+    // Based on each button label it will create a swiper of the required type and test the pass 
+    // Extra Credit: All possible access cases are covered (9 cases = 5 access areas + 2 ride + 2 discount )
+    
     @IBAction func test(sender: AnyObject) {
 
         if let button = sender as? UIButton, buttonLabel = button.titleLabel, buttonLabelText = buttonLabel.text {
@@ -72,7 +78,7 @@ class PassViewController: UIViewController {
             
             switch buttonLabelText {
             case "Main Admin Office":
-                swiperToTest = RideAccessPoint(accessToCheck: AreaAccessType.OfficeAreas, locationName: "Main Admin Office")
+                swiperToTest = AreaAccessPoint(accessToCheck: AreaAccessType.OfficeAreas, locationName: "Main Admin Office")
             case "Skip Line Dumbo Gate":
                 swiperToTest = RideAccessPoint(accessToCheck: RideAccessType.SkipAllRidesLines, locationName: "Skip Line Dumbo Gate")
             case "Thunder Mountain Ride":
@@ -100,7 +106,7 @@ class PassViewController: UIViewController {
             if swipeTestResults.0 == true // access granted
             {
                 testingResults.backgroundColor = UIColor(red: 12/255.0, green: 100/255.0, blue: 0, alpha: 1.0)
-            }else {
+            } else {
                 testingResults.backgroundColor = UIColor.redColor()
             }
             testingResults.textColor = UIColor.whiteColor()

@@ -13,11 +13,16 @@ import AVFoundation
 var dingSound: SystemSoundID = 0     // Access granted sound
 var buzzSound: SystemSoundID = 1     // Access Denied  sound
 
+// To stick to DRY concept I decided to control input fields through an array of input fields, this makes validation and control much easier
+// This struct defines the mapping between UI elements (UITextField ,UILabel and the corresponding data element in the Model)
 struct FieldMap {
     let inputField: UITextField
     let reqInfo: RequiredInfo
     let label: UILabel
 }
+
+// To stick to DRY concept I decided to control the entrants types buttons through two array(mian buttons and sub buttons)
+// This struct defines the mapping between button Label the corresponding enterant type
 struct ButtonEntrantMap {
     let buttonLabel: String
     let entrantType: Entrant
@@ -30,7 +35,9 @@ class ViewController: UIViewController {
     let parkSystem = ParkSystem()
     var currentEntrantType: Entrant = Guest.ClassicGuest
     var currentSubButtonLabel = ""
+    
     // Stack views
+    // Buttons will be created dynamically and attached to the stack views
     @IBOutlet weak var entrantTypeSV: UIStackView!
     @IBOutlet weak var subTypeSV: UIStackView!
 
@@ -60,15 +67,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var zipCodeLabel: UILabel!
     
     // Mapping data to UI elemnets
-    var inputFieldsMappingArray = [FieldMap]()
-    var buttonEntrantTypesMappingArray = [ButtonEntrantMap]()
+    var inputFieldsMappingArray = [FieldMap]() //array for mapping fields to data elements
+    var buttonEntrantTypesMappingArray = [ButtonEntrantMap]() // array to map buttons to enterant types
     
     // Buttons
-    var currentSubButtons = [UIButton]()
-    var mainButtons = [UIButton]()
+    var currentSubButtons = [UIButton]() // Main buttons array (Guest, Employee, ..)
+    var mainButtons = [UIButton]() // sub buttons (for sub types Child, Food services employee, .. )
     
-    let mainButtonsList = ["Guest","Employee","Manager","Vendor"]
-    let subButtonsList = [
+    let mainButtonsList = ["Guest","Employee","Manager","Vendor"] // Main buttons labels
+    // sub buttons lables in a dictionary
+    let subButtonsList =
+    [
         "Guest":["Child", "Adult", "Senior","VIP","Season Pass"] ,
         "Employee": ["Food Services","Ride Services","Maintenance", "Contractor"],
         "Manager": ["Manager"],
@@ -85,13 +94,13 @@ class ViewController: UIViewController {
         // setup buttons
         // Main
         setupMainButtons()
-        changeButtonsColor( mainButtonsList[0], buttonsList: mainButtons)
+        changeButtonsColor( mainButtonsList[0], buttonsList: mainButtons) // Make first button highlighted
         
         // Sub
         setupSubButtons( mainButtonsList[0])
         if let firsMainButtonList = subButtonsList[ mainButtonsList[0]] {
         let firstLabel = firsMainButtonList[0]
-            changeButtonsColor(firstLabel , buttonsList: currentSubButtons)
+            changeButtonsColor(firstLabel , buttonsList: currentSubButtons) // Highlight first button
             
         }
         
@@ -128,10 +137,9 @@ class ViewController: UIViewController {
             ButtonEntrantMap(buttonLabel: "Vendor", entrantType: Vendor.Vendor(""))
         ]
         
-        // enable fields for first choice
+        // enable fields for first button choice
         currentEntrantType = buttonEntrantTypesMappingArray[0].entrantType
         currentSubButtonLabel = buttonEntrantTypesMappingArray[0].buttonLabel
-        
         enableRequiredFields()
         // clear data and restore fields color
         makeAllFieldsNormal(true)
@@ -140,6 +148,8 @@ class ViewController: UIViewController {
         loadSounds()
     }
    
+    // This method will enable only the required fields based on current entrant type
+    // First it gets the list of required fields, then iterate through them and enable them on screen
     func enableRequiredFields() {
         
         let reqFieldsList = currentEntrantType.requiredInfo
@@ -163,8 +173,9 @@ class ViewController: UIViewController {
         
     }
     
+    // Helper method to make fields gets the normal appearence
+    // This method is usually called before validation of data input. After validation fields with wrong data are highleted in red borders
     func makeAllFieldsNormal(clearData: Bool) {
-        
         // make color normal
         for f in inputFieldsMappingArray {
             f.inputField.layer.borderWidth = 1
@@ -191,6 +202,9 @@ class ViewController: UIViewController {
         
     }
     
+    // This method is called before segue when user clicks Generate Pass
+    // It first validates the data, if all OK it will segue, otherwise it will highlight wrong fields in red borders
+    // It will also display error message
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         // create Info struct
         let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
@@ -225,9 +239,9 @@ class ViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
         if segue.identifier == "showPassSegue" {
-        // create Info struct
+        
+            // Decide what is the current entrant type
             for m in buttonEntrantTypesMappingArray {
                 if m.buttonLabel == currentSubButtonLabel {
                     if m.buttonLabel == "Vendor" {
@@ -240,14 +254,12 @@ class ViewController: UIViewController {
                         currentEntrantType = m.entrantType
                     }
                     currentSubButtonLabel = m.buttonLabel
-                 
                 }
-                
             }
-            
-        
-            
+         // create Info struct
         let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
+            
+        // Generate a pass and give it to the Pass view controller
             if let pass = parkSystem.createPass(currentEntrantType, addionalInfo: info) {
         
             if let controller = segue.destinationViewController as? PassViewController {
@@ -266,6 +278,7 @@ class ViewController: UIViewController {
     
     }
 
+    // Helper method to show error message
     func showErrorMessage(errors:[ErrorComponents]){
         var message: String = ""
         for e in errors {
@@ -277,8 +290,10 @@ class ViewController: UIViewController {
         
     }
     
+    // Method that responds to all main buttons
+    // Based on which main button was clicked it will create the list of the sub buttons and add them to the stack view
+    // It also sets the current enterant type
     @IBAction func mainButtonResponder(sender: AnyObject) {
-    
         if let sender = sender as? UIButton,label = sender.titleLabel?.text {
             changeButtonsColor(label, buttonsList: mainButtons)
             setupSubButtons(label)
@@ -299,9 +314,6 @@ class ViewController: UIViewController {
                             currentEntrantType = b.entrantType
                         }
 
-                        
-                    
-                    
                         currentSubButtonLabel = b.buttonLabel
                         enableRequiredFields()
                         // clear data and restore fields color
@@ -314,8 +326,11 @@ class ViewController: UIViewController {
         
     }
     
+    // Method that responds to all sub buttons
+    // Based on which Sub button was clicked it will enable the required fields
+    // It also sets the current enterant type
+
     @IBAction func subButtonResponder(sender: AnyObject) {
-    
     
         if let sender = sender as? UIButton, label = sender.titleLabel?.text {
             
@@ -349,8 +364,8 @@ class ViewController: UIViewController {
         return true
     }
     
+    // Method to create sub buttons and add them to the stack view
     func setupSubButtons(subButtonsListKey: String) {
-        
         //remove old buttons
         for b in currentSubButtons {
             b.removeFromSuperview()
@@ -377,11 +392,11 @@ class ViewController: UIViewController {
             print ("Error in button list key")
         }
     
-}
+    }
+ 
+    // Method to create main buttons based on the array of mainButtonsList that was defined earlier
     func setupMainButtons() {
-        
         // create main buttons
-       
             for t in mainButtonsList
             {
                 let newButton = UIButton(type: .System)
@@ -396,6 +411,7 @@ class ViewController: UIViewController {
         
     }
     
+    // Helper method to change the buttons font color so it highlights teh current selected button
     func changeButtonsColor(buttonLabelToHighlight:String, buttonsList: [UIButton]) {
         
         for b in buttonsList {
@@ -408,9 +424,9 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    // Method to populate default data in only required fields based on entrant tyep
     @IBAction func populateData() {
-        
-        
         // populate data for only enabled fields
         for f in inputFieldsMappingArray {
             
@@ -431,10 +447,9 @@ class ViewController: UIViewController {
                 }
             }
         }
-        
-     print ("after filling data first name: \(firstNameInput.text)")
-        
     }
+    
+    
     func loadSounds() {
         var pathToSoundFile = NSBundle.mainBundle().pathForResource("AccessGranted", ofType: "wav")
         var soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
