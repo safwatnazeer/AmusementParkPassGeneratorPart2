@@ -20,6 +20,7 @@
 		304821301DA0FF6B00DCE718 /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3048212E1DA0FF6B00DCE718 /* AccessGranted.wav */; };
 		306710A31DA45DF5004EA315 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306710A21DA45DF5004EA315 /* Vendor.swift */; };
 		306710A51DA45E13004EA315 /* ContractEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306710A41DA45E13004EA315 /* ContractEmployee.swift */; };
+		306710A71DA6D534004EA315 /* PassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306710A61DA6D534004EA315 /* PassViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		3048212E1DA0FF6B00DCE718 /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessGranted.wav; sourceTree = "<group>"; };
 		306710A21DA45DF5004EA315 /* Vendor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
 		306710A41DA45E13004EA315 /* ContractEmployee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContractEmployee.swift; sourceTree = "<group>"; };
+		306710A61DA6D534004EA315 /* PassViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			children = (
 				304821111DA0FE1100DCE718 /* AppDelegate.swift */,
 				304821131DA0FE1100DCE718 /* ViewController.swift */,
+				306710A61DA6D534004EA315 /* PassViewController.swift */,
 				304821151DA0FE1100DCE718 /* Main.storyboard */,
 				304821181DA0FE1100DCE718 /* Assets.xcassets */,
 				3048211A1DA0FE1100DCE718 /* LaunchScreen.storyboard */,
@@ -179,6 +182,7 @@
 			files = (
 				3048212B1DA0FE7A00DCE718 /* Entrant.swift in Sources */,
 				306710A31DA45DF5004EA315 /* Vendor.swift in Sources */,
+				306710A71DA6D534004EA315 /* PassViewController.swift in Sources */,
 				304821251DA0FE6D00DCE718 /* BasicElements.swift in Sources */,
 				304821291DA0FE7A00DCE718 /* Swiper.swift in Sources */,
 				3048212A1DA0FE7A00DCE718 /* ParkSystem.swift in Sources */,

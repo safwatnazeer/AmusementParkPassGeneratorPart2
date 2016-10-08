@@ -50,12 +50,15 @@ extension ParkControlSystem  {
         if requiredInfo.contains(.State) && (info.state == nil || info.state == "") {errors.append(ErrorComponents(field:RequiredInfo.State,error: Error.StateMissing))}
         if requiredInfo.contains(.ZipCode) && (info.zipCode == nil  || info.zipCode == "") {errors.append(ErrorComponents(field:RequiredInfo.ZipCode,error: Error.ZipCodeMissing))}
         
+        if requiredInfo.contains(RequiredInfo.ProjectNumber) && (info.projectNumber == nil  || info.projectNumber == "") {errors.append(ErrorComponents(field:.ProjectNumber,error: Error.ProjectNumberMissing))}
+        if requiredInfo.contains(RequiredInfo.VendorCompany) && (info.vendorCompany == nil  || info.vendorCompany == "") {errors.append(ErrorComponents(field:RequiredInfo.VendorCompany,error: Error.VendorCompanyMissing))}
+        
         // check birthdate for guest child
         if let guestType = entrantType as? Guest {
             if (guestType == .FreeChildGuest) {
                 if let birthDate = info.birthDate {
                     // check age <= 5 years else add error age above limit
-                     
+                    
                     if !checkChildAgeInLimit(birthDate) && birthDate != "" {errors.append(ErrorComponents(field:RequiredInfo.BirthDate,error: Error.FreeChildGuestAgeAboveLimit)) }
                     
                 }

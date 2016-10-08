@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     // Park System
     let parkSystem = ParkSystem()
     var currentEntrantType: Entrant = Guest.ClassicGuest
-    
+    var currentSubButtonLabel = ""
     // Stack views
     @IBOutlet weak var entrantTypeSV: UIStackView!
     @IBOutlet weak var subTypeSV: UIStackView!
@@ -59,7 +59,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var zipCodeLabel: UILabel!
     
-    // Mapping data to UI
+    // Mapping data to UI elemnets
     var inputFieldsMappingArray = [FieldMap]()
     var buttonEntrantTypesMappingArray = [ButtonEntrantMap]()
     
@@ -130,11 +130,14 @@ class ViewController: UIViewController {
         
         // enable fields for first choice
         currentEntrantType = buttonEntrantTypesMappingArray[0].entrantType
+        currentSubButtonLabel = buttonEntrantTypesMappingArray[0].buttonLabel
+        
         enableRequiredFields()
         // clear data and restore fields color
         makeAllFieldsNormal(true)
         
-        
+        // load sounds
+        loadSounds()
     }
    
     func enableRequiredFields() {
@@ -175,10 +178,13 @@ class ViewController: UIViewController {
     
     @IBAction func createPass() {
         
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         // create Info struct
         let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
         
-      let errors = parkSystem.validateRequiredInfo(currentEntrantType, info: info)
+        let errors = parkSystem.validateRequiredInfo(currentEntrantType, info: info)
         for e in errors { print("There is error: \(e)")}
         
         // make all fields normal
@@ -197,10 +203,58 @@ class ViewController: UIViewController {
         // show error message
         if errors.count > 0 {
             showErrorMessage(errors)
+            return false
         }
         else {
-            // create pass
+            return true
+            
+            
         }
+
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "showPassSegue" {
+        // create Info struct
+            for m in buttonEntrantTypesMappingArray {
+                if m.buttonLabel == currentSubButtonLabel {
+                    if m.buttonLabel == "Vendor" {
+                        let vendor = Vendor.Vendor(companyInput.text!)
+                        currentEntrantType = vendor
+                    } else  if m.buttonLabel == "Contractor" {
+                        let contractor = ContractEmployee.ContractEmployee(projectInput.text!)
+                        currentEntrantType = contractor
+                    } else  {
+                        currentEntrantType = m.entrantType
+                    }
+                    currentSubButtonLabel = m.buttonLabel
+                  //  enableRequiredFields()
+                    // clear data and restore fields color
+                    //makeAllFieldsNormal(true)
+                }
+                
+            }
+            
+        /// 
+        print ("first name now is : \(firstNameInput.text)")
+            
+        ///
+            
+        let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
+            if let pass = parkSystem.createPass(currentEntrantType, addionalInfo: info) {
+        
+            if let controller = segue.destinationViewController as? PassViewController {
+                controller.pass = pass // give pass info
+                controller.passType = currentSubButtonLabel  // guest type to display
+            }
+            }
+            else {
+                print("Pass was not created ....")
+            }
+            
+        }
+    
     }
 
     func showErrorMessage(errors:[ErrorComponents]){
@@ -225,7 +279,21 @@ class ViewController: UIViewController {
                 changeButtonsColor(firstLabel , buttonsList: currentSubButtons)
                 for b in buttonEntrantTypesMappingArray{
                     if b.buttonLabel == firstLabel {
-                        currentEntrantType = b.entrantType
+                    
+                        if b.buttonLabel == "Vendor" {
+                            let vendor = Vendor.Vendor(companyInput.text!)
+                            currentEntrantType = vendor
+                        } else  if b.buttonLabel == "Contractor" {
+                            let contractor = ContractEmployee.ContractEmployee(projectInput.text!)
+                            currentEntrantType = contractor
+                        } else  {
+                            currentEntrantType = b.entrantType
+                        }
+
+                        
+                    
+                    
+                        currentSubButtonLabel = b.buttonLabel
                         enableRequiredFields()
                         // clear data and restore fields color
                         makeAllFieldsNormal(true)
@@ -247,7 +315,16 @@ class ViewController: UIViewController {
             
             for m in buttonEntrantTypesMappingArray {
                 if m.buttonLabel == label {
-                    currentEntrantType = m.entrantType
+                    if m.buttonLabel == "Vendor" {
+                        let vendor = Vendor.Vendor(companyInput.text!)
+                        currentEntrantType = vendor
+                    } else  if m.buttonLabel == "Contractor" {
+                        let contractor = ContractEmployee.ContractEmployee(projectInput.text!)
+                        currentEntrantType = contractor
+                    } else  {
+                        currentEntrantType = m.entrantType
+                    }
+                    currentSubButtonLabel = m.buttonLabel
                     enableRequiredFields()
                     // clear data and restore fields color
                     makeAllFieldsNormal(true)
@@ -330,7 +407,7 @@ class ViewController: UIViewController {
             
             if f.inputField.enabled == true {
                 switch f.reqInfo {
-                    case .BirthDate: f.inputField.text = "10/19/1995"
+                    case .BirthDate: f.inputField.text = "10/08/2013"
                     case .FirstName: f.inputField.text = "Safwat"
                     case .LastName: f.inputField.text = "Shenouda"
                     case .VendorCompany: f.inputField.text = "Acme"
@@ -346,8 +423,26 @@ class ViewController: UIViewController {
             }
         }
         
+     print ("after filling data first name: \(firstNameInput.text)")
+        
+    }
+    func loadSounds() {
+        var pathToSoundFile = NSBundle.mainBundle().pathForResource("AccessGranted", ofType: "wav")
+        var soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
+        AudioServicesCreateSystemSoundID(soundURL, &dingSound)
+        
+        pathToSoundFile = NSBundle.mainBundle().pathForResource("AccessDenied", ofType: "wav")
+        soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
+        AudioServicesCreateSystemSoundID(soundURL, &buzzSound)
+        
         
         
     }
+    
+    func playSound(sound:SystemSoundID) {
+        AudioServicesPlaySystemSound(sound)
+        
+    }
+
     
    }

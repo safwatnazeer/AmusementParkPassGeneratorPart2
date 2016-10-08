@@ -14,20 +14,20 @@ protocol AccessPrevilige {
 }
 
 // enum for all areas to be accessed
-enum AreaAccessType: AccessPrevilige {
+enum AreaAccessType: String, AccessPrevilige {
     
-    case AmuesmentAreas
-    case KitchenAreas
-    case RideControlAreas
-    case MaintenanceAreas
-    case OfficeAreas
+    case AmuesmentAreas = "Amuesment Areas"
+    case KitchenAreas = "Kitchen Areas"
+    case RideControlAreas = "Ride Control Areas"
+    case MaintenanceAreas = "Maintenance Areas"
+    case OfficeAreas = "Office Areas"
     
 }
 
 // enum for rides access gates types
-enum RideAccessType: AccessPrevilige {
-    case AllRides
-    case SkipAllRidesLines
+enum RideAccessType: String, AccessPrevilige {
+    case AllRides = "Unlimited Rides"
+    case SkipAllRidesLines = "Skip Line"
 }
 
 // enum for possible food dicounts
@@ -60,6 +60,8 @@ enum Error: String {
     case CityMissing = "City is missing"
     case StateMissing = "State is missing"
     case ZipCodeMissing = "Zip code is missing"
+    case ProjectNumberMissing = "Project Number is missing"
+    case VendorCompanyMissing = "Company is missing"
 }
 
 
