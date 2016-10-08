@@ -150,11 +150,13 @@ class ViewController: UIViewController {
                 f.inputField.enabled = true
                 f.label.textColor = UIColor.blackColor()
                 f.inputField.backgroundColor = UIColor.whiteColor()
+                f.inputField.textColor = UIColor.blackColor()
             }else {
                 // disable field
                 f.inputField.enabled = false
                 f.label.textColor = UIColor.lightGrayColor()
                 f.inputField.backgroundColor = UIColor.clearColor()
+                f.inputField.textColor = UIColor.lightGrayColor()
                 
             }
         }
@@ -169,7 +171,16 @@ class ViewController: UIViewController {
             f.inputField.layer.cornerRadius = 5.0
             f.inputField.layer.borderColor = UIColor.lightGrayColor().CGColor
             // clear input text
-            if clearData { f.inputField.text = "" }
+            if clearData {
+                switch f.reqInfo {
+                    case .BirthDate: f.inputField.text = "MM/DD/YYYY"
+                    case .SSN: f.inputField.text = "###-##-####"
+                    case .ProjectNumber: f.inputField.text = "######"
+                    
+                    default: f.inputField.text = ""
+                }
+                
+            }
         
         }
         
@@ -229,17 +240,12 @@ class ViewController: UIViewController {
                         currentEntrantType = m.entrantType
                     }
                     currentSubButtonLabel = m.buttonLabel
-                  //  enableRequiredFields()
-                    // clear data and restore fields color
-                    //makeAllFieldsNormal(true)
+                 
                 }
                 
             }
             
-        /// 
-        print ("first name now is : \(firstNameInput.text)")
-            
-        ///
+        
             
         let info = Info(birthDate: birthDateInput.text, firstName: firstNameInput.text, lastName: lastNameInput.text, streetAddress: addressInput.text, city: cityInput.text, state: stateInput.text, zipCode: zipCodeInput.text, projectNumber: projectInput.text, vendorCompany: companyInput.text,visitDate: NSDate())
             if let pass = parkSystem.createPass(currentEntrantType, addionalInfo: info) {
@@ -247,6 +253,9 @@ class ViewController: UIViewController {
             if let controller = segue.destinationViewController as? PassViewController {
                 controller.pass = pass // give pass info
                 controller.passType = currentSubButtonLabel  // guest type to display
+                controller.completionHandler = {
+                    self.makeAllFieldsNormal(true)
+                }
             }
             }
             else {

@@ -8,10 +8,13 @@
 
 import UIKit
 
+typealias HANDLER = ()->()
+
 class PassViewController: UIViewController {
 
     var pass : Pass?
     var passType: String?
+    var completionHandler : HANDLER?
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var passTypeLabel: UILabel!
@@ -22,6 +25,13 @@ class PassViewController: UIViewController {
     
     @IBAction func createNewPass(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        // call main view controller to clear all fields
+        if let completionHandler = completionHandler {
+            completionHandler()
+        }else {
+            fatalError()
+        }
         
     }
     

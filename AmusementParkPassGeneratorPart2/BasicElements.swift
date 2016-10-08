@@ -47,6 +47,18 @@ enum DiscountAccessMerchandise : Int,AccessPrevilige {
 }
 
 
+// constants for fields minimum length validatation --> Extra Credit 
+let firstNameMinLength = 5
+let lastNameMinLength = 5
+let streetAddressMinLength = 10
+let cityMinLength = 5
+let stateMinLength = 2
+let companyMinLength = 2
+let projectMinLength = 4
+let birthDateMinLength = 10
+let zipCodeMinLength = 6
+
+
 // All Error types for missing info or other possibl errors
 enum Error: String {
     case NoError = "No Error"
@@ -62,6 +74,20 @@ enum Error: String {
     case ZipCodeMissing = "Zip code is missing"
     case ProjectNumberMissing = "Project Number is missing"
     case VendorCompanyMissing = "Company is missing"
+    
+    // Extra Credit input validation
+    case BirthDateTooShort = "Birth date is too short"
+    case FirstNameTooShort = "First name should be more than 5 charachters"
+    case LastNameTooShort = "Last name should be more than 5 charachters"
+    case StreetAddressTooShort = "Street Address should be more than 10 charachters"
+    case CityTooShort = "City name should be more than 5 charachters"
+    case StateTooShort = "State should be 2 or charachters"
+    case CompanyTooShort = "Company name should be more than 2 charachters "
+    case ProjectTooShort = "Project number should be 4 digits ate leasts"
+    case ZipCodeTooShort = "Zip Code should be 5 digits"
+    case ProjectNumberInvalid = "Project number is invalid"
+    case ZipCodeInvalid = "Zip code is invalid"
+
 }
 
 
